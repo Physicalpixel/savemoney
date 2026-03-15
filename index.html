@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Age & Amount Growth Table</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f3;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      color: #1a1a1a;
+    }
+    .inputs {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-size: 13px;
+      color: #666;
+    }
+    input[type=number] {
+      width: 150px;
+      padding: 8px 12px;
+      border: 0.5px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      background: #fff;
+      color: #1a1a1a;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input[type=number]:focus {
+      border-color: #888;
+    }
+    .table-scroll {
+      overflow-x: auto;
+      background: #fff;
+      border-radius: 12px;
+      border: 0.5px solid #ddd;
+    }
+    table {
+      border-collapse: collapse;
+      font-size: 14px;
+      min-width: 100%;
+    }
+    thead th {
+      background: #eef3fb;
+      color: #1a5fa5;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 10px 16px;
+      text-align: center;
+      white-space: nowrap;
+      border-bottom: 0.5px solid #ddd;
+    }
+    thead th.row-header {
+      background: #f5f5f3;
+      color: #888;
+      text-align: left;
+    }
+    tbody td {
+      padding: 10px 16px;
+      border-bottom: 0.5px solid #eee;
+      white-space: nowrap;
+      text-align: center;
+      color: #1a1a1a;
+    }
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+    tbody td.row-label {
+      font-weight: 500;
+      color: #555;
+      font-size: 13px;
+      text-align: left;
+      background: #fafaf8;
+    }
+    tbody tr:nth-child(even) td:not(.row-label) {
+      background: #fafaf8;
+    }
+  </style>
+</head>
+<body>
+  <h1>Age & Amount Growth Table</h1>
+  <div class="inputs">
+    <div class="field">
+      <label>Current age</label>
+      <input type="number" id="age" value="12" min="0" max="100" />
+    </div>
+    <div class="field">
+      <label>Daily amount ($)</label>
+      <input type="number" id="amount" value="10" min="0" step="0.01" />
+    </div>
+  </div>
+  <div class="table-scroll">
+    <table id="main-table"></table>
+  </div>
+
+  <script>
+    function render() {
+      const age = parseInt(document.getElementById('age').value) || 0;
+      const amount = parseFloat(document.getElementById('amount').value) || 0;
+      const years = Array.from({length: 15}, (_, i) => i + 1);
+
+      let yearRow  = '<tr><th class="row-header">Year</th>';
+      let ageRow   = '<tr><td class="row-label">Age</td>';
+      let totalRow = '<tr><td class="row-label">Total amount</td>';
+
+      years.forEach(y => {
+        yearRow  += `<th>Year ${y}</th>`;
+        ageRow   += `<td>${age + y}</td>`;
+        const total = (amount * 365 * y).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        totalRow += `<td>$${total}</td>`;
+      });
+
+      yearRow  += '</tr>';
+      ageRow   += '</tr>';
+      totalRow += '</tr>';
+
+      document.getElementById('main-table').innerHTML =
+        `<thead>${yearRow}</thead><tbody>${ageRow}${totalRow}</tbody>`;
+    }
+
+    document.getElementById('age').addEventListener('input', render);
+    document.getElementById('amount').addEventListener('input', render);
+    render();
+  </script>
+</body>
+</html>
