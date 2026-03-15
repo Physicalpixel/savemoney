@@ -57,41 +57,33 @@
     table {
       border-collapse: collapse;
       font-size: 14px;
-      min-width: 100%;
+      width: 100%;
     }
     thead th {
-      background: #eef3fb;
-      color: #1a5fa5;
+      background: #f5f5f3;
+      color: #888;
       font-size: 12px;
       font-weight: 500;
       padding: 10px 16px;
-      text-align: center;
+      text-align: left;
       white-space: nowrap;
       border-bottom: 0.5px solid #ddd;
-    }
-    thead th.row-header {
-      background: #f5f5f3;
-      color: #888;
-      text-align: left;
     }
     tbody td {
       padding: 10px 16px;
       border-bottom: 0.5px solid #eee;
       white-space: nowrap;
-      text-align: center;
       color: #1a1a1a;
     }
-    tbody tr:last-child td {
-      border-bottom: none;
-    }
-    tbody td.row-label {
+    tbody tr:last-child td { border-bottom: none; }
+    tbody td.year-cell {
+      background: #eef3fb;
+      color: #1a5fa5;
+      font-size: 12px;
       font-weight: 500;
-      color: #555;
-      font-size: 13px;
-      text-align: left;
-      background: #fafaf8;
+      text-align: center;
     }
-    tbody tr:nth-child(even) td:not(.row-label) {
+    tbody tr:nth-child(even) td:not(.year-cell) {
       background: #fafaf8;
     }
   </style>
@@ -116,25 +108,27 @@
     function render() {
       const age = parseInt(document.getElementById('age').value) || 0;
       const amount = parseFloat(document.getElementById('amount').value) || 0;
-      const years = Array.from({length: 15}, (_, i) => i + 1);
 
-      let yearRow  = '<tr><th class="row-header">Year</th>';
-      let ageRow   = '<tr><td class="row-label">Age</td>';
-      let totalRow = '<tr><td class="row-label">Total amount</td>';
+      let html = `<thead><tr>
+        <th>Year</th>
+        <th>Age</th>
+        <th>Savings at year end</th>
+        <th>Calculation</th>
+      </tr></thead><tbody>`;
 
-      years.forEach(y => {
-        yearRow  += `<th>Year ${y}</th>`;
-        ageRow   += `<td>${age + y}</td>`;
+      for (let y = 1; y <= 15; y++) {
+        const futureAge = age + y;
         const total = (amount * 365 * y).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        totalRow += `<td>$${total}</td>`;
-      });
+        html += `<tr>
+          <td class="year-cell">Year ${y}</td>
+          <td>${futureAge}</td>
+          <td>$${total}</td>
+          <td style="color:#999; font-size:13px;">$${amount.toFixed(2)} × 365 × ${y}</td>
+        </tr>`;
+      }
 
-      yearRow  += '</tr>';
-      ageRow   += '</tr>';
-      totalRow += '</tr>';
-
-      document.getElementById('main-table').innerHTML =
-        `<thead>${yearRow}</thead><tbody>${ageRow}${totalRow}</tbody>`;
+      html += '</tbody>';
+      document.getElementById('main-table').innerHTML = html;
     }
 
     document.getElementById('age').addEventListener('input', render);
