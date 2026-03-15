@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Savings Forecast by Age</title>
+  <title>Save Daily, Gain Yearly: A Savings Forecast by Age</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -58,6 +58,7 @@
       border-collapse: collapse;
       font-size: 14px;
       width: 100%;
+      table-layout: fixed;
     }
     thead th {
       background: #f5f5f3;
@@ -69,6 +70,10 @@
       white-space: nowrap;
       border-bottom: 0.5px solid #ddd;
     }
+    thead th:nth-child(1) { width: 120px; }
+    thead th:nth-child(2) { width: 60px; }
+    thead th:nth-child(3) { width: 130px; }
+    thead th:nth-child(4) { width: auto; }
     tbody td {
       padding: 10px 16px;
       border-bottom: 0.5px solid #eee;
@@ -82,6 +87,7 @@
       font-size: 12px;
       font-weight: 500;
       text-align: center;
+      width: 120px;
     }
     tbody tr:nth-child(even) td:not(.year-cell) {
       background: #fafaf8;
@@ -89,7 +95,7 @@
   </style>
 </head>
 <body>
-  <h1>Age & Amount Growth Table</h1>
+  <h1>Save Daily, Gain Yearly: A Savings Forecast by Age</h1>
   <div class="inputs">
     <div class="field">
       <label>Current age</label>
@@ -112,7 +118,7 @@
       let html = `<thead><tr>
         <th>Savings at the end of</th>
         <th>Age</th>
-        <th>Total Saved</th>
+        <th>Total saved</th>
         <th>Calculation</th>
       </tr></thead><tbody>`;
 
